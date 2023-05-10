@@ -9,6 +9,8 @@ import org.uaa.reader.LabelDto;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PdfCreator
@@ -17,12 +19,14 @@ public class PdfCreator
 
     public void create(List<LabelDto> labels)
     {
-
+        DateTimeFormatter formatter  = DateTimeFormatter.ofPattern("dd MM yyyy_ HH:mm:ss");
+        String fileName = formatter.format(LocalDateTime.now()) + " labels.pdf";
+        System.out.println("Create file");
         Rectangle one = new Rectangle(50.0F, 50.0F);
         Document document = new Document(one);
         try
         {
-            PdfWriter.getInstance(document, new FileOutputStream("pdf.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(fileName));
             document.setMargins(1, 1, 1, 1);
             document.open();
             BaseFont bf = BaseFont.createFont(FONT, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
@@ -85,6 +89,7 @@ public class PdfCreator
                 document.add(table);
             }
             document.close();
+            System.out.println("Creating file is complete");
 
         }
         catch (Exception e)
